@@ -1,0 +1,59 @@
+{
+  "name": "hydra-talk",
+  "version": "0.0.1",
+  "description": "A multi-service chat client for the modern world.",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "main": "dist/electron/electron-main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lionel07/HydraTalk.git"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "coffeelintConfig": {
+    "indentation": {
+      "level": "error",
+      "value": 4
+    },
+    "cyclomatic_complexity": {
+      "level": "warn",
+      "value": 20
+    },
+    "max_line_length": {
+      "level": "warn",
+      "value": 120
+    }
+  },
+  "author": "Lionel07",
+  "bugs": {
+    "url": "https://github.com/Lionel07/HydraTalk/issues"
+  },
+  "homepage": "https://github.com/Lionel07/HydraTalk#readme",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "electron": "^1.4.3",
+    "gulp": "^3.9.1",
+    "gulp-bower-normalize": "^1.1.1",
+    "gulp-changed": "^1.3.2",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-closure-compiler": "^0.4.0",
+    "gulp-coffee": "^2.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-html-minifier": "^0.1.8",
+    "gulp-jshint": "^2.0.2",
+    "gulp-less": "^3.1.0",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-util": "^3.0.7",
+    "jshint": "^2.9.4",
+    "jshint-stylish": "^2.2.1",
+    "less": "^2.7.1",
+    "less-plugin-autoprefix": "^1.5.1",
+    "main-bower-files": "^2.13.1",
+    "require-dir": "^0.3.1",
+    "run-sequence": "^1.2.2"
+  }
+}
