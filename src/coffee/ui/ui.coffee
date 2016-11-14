@@ -5,6 +5,8 @@ hydra = this.hydra
 
 class UI
     constructor: ->
-        doDebugLog("UI","Init")
+        doDebugLog("UI","Created")
+    start: ->
+        doDebugLog("UI","Starting")
 
 hydra.ui = new UI()

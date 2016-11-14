@@ -10,7 +10,7 @@ class hydra.Message
         @time = time
         @service = service
     jsonToObject: (json) ->
-        #TODO: Implement
+        #TODO: Implement JSON -> Message Conversion
 
 class hydra.Conversation
     constructor: ->
@@ -27,7 +27,7 @@ class hydra.Conversation
         @messages[@messages.length - 1]
 
     jsonToObject: (json) ->
-        #TODO: Implement
+        #TODO: Implement JSON -> Conversation Conversion
 
 class hydra.Person
     constructor: (name = "", services = []) ->

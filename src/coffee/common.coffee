@@ -22,3 +22,11 @@ exports.clientInfo = {
     isMacOS: checkUA(/macintosh|mac os x/),
     isLinux: checkUA(/linux/)
 }
+
+ticksPerSecond = 4
+
+idleTickrate   = 2
+focusTickrate  = 4
+turboTickrate = 16
+
+tickFromSeconds = (seconds) -> seconds * ticksPerSecond
