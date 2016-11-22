@@ -4,6 +4,7 @@ global = window
 #TODO: Write App core logic
 
 class App
+    tickGuard = false
     constructor: ->
         @messageQueue = []
         @shouldTick = true
@@ -24,6 +25,7 @@ class App
         return unless tickGuard is false
         tickGuard = true
         @processTasks()
+        @doUpdate()
         tickGuard = false
         return
 
@@ -31,12 +33,24 @@ class App
         for task in @tickObjects
             task.ticks-- if task.ticks > 0
             if task.ticks is 0
-                #doLog("Hydra", "Processing task: #{task.name}...")
                 status = task.callback(task)
-                #doDebugLog("Hydra", "#{task.name}:#{if status then "Complete" else "Failed"}")
                 if task.repeat?
                     task.ticks = task.repeatTo
 
+    doUpdate: ->
+        for provider in hydra.providers
+            @processProviderPacket(provider.tick())
 
-
+    processProviderPacket: (packet) ->
+        switch packet.packetType
+            when "update"
+                switch packet.updateType
+                    when "full"
+                        # TODO: Rewrite logic to be local to the database
+                        hydra.database.people.people = packet.contacts
+                        hydra.database.conversations.conversations = packet.conversations
+                    when "delta"
+                        return status
+            when "null"
+                return
 hydra.app = new App()

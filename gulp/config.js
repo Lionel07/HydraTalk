@@ -20,8 +20,8 @@ module.exports = {
         bundle_name: "app.js"
     },
     less: {
-        src:  base + "less/main.less",
-        allsrc:  base + "less/*.less",
+        src:  base + "less/**/main.less",
+        allsrc:  base + "less/**/*.less",
         dest: dest + "css/"
     },
     libs: {

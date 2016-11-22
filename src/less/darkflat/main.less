@@ -1,0 +1,73 @@
+// Appbar
+
+@textcolor: white;
+@sidebar_color: #222;
+@conversation_color: @sidebar_color + #111;
+@chat_color: #444;
+@appbar_increment: #222;
+@text-conversation-name-size: 1.5em;
+@text-conversation-blurb-size: 1em;
+
+body {
+    color: @textcolor;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+}
+
+sidebar {
+    background-color: @sidebar_color;
+}
+
+chat {
+    background-color: @chat_color;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+}
+
+.appbar-chat {
+    background-color: @chat_color + @appbar_increment;
+}
+
+.appbar-sidebar {
+    background-color: @sidebar_color + @appbar_increment;
+}
+
+#appbar-menu-content {
+    background-color: @sidebar_color - #111;
+    ul {
+        li { background-color: #333; }
+        li:hover {background-color: #444;}
+    }
+}
+
+.conversation-base {
+    background-color: @conversation_color;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size:@text-conversation-blurb-size;
+    color: #CCCCCC;
+    .conversation-name {
+        font-family: 'Roboto', sans-serif;
+        font-size:@text-conversation-name-size;
+        color: @textcolor;
+    }
+}
+
+#noconversationtext {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+}
+
+.chat-message {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 400;
+    font-size: 1.1em;
+}
+
+#nochatmessage {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 400;
+    font-size: 1em;
+    color: #CCCCCC;
+}

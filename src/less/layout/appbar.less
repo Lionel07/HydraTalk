@@ -1,0 +1,56 @@
+@appbar_sz_top: 48px;
+@appbar_sz_bottom: 32px;
+
+appbar {
+    position: absolute;
+    display: inline-flex;
+    height: @appbar_sz_top; width: 100%;
+    padding: 0; margin: 0;
+    flex: 1 1 auto;
+    z-index: 1;
+
+}
+
+.appbar-header {
+    height: @appbar_sz_top;
+    top: 0;
+}
+
+.appbar-footer {
+    height: @appbar_sz_bottom;
+    bottom: 0;
+}
+
+.appbar-icon {
+    width: @appbar_sz_bottom;
+    height: @appbar_sz_bottom;
+    font-size: @appbar_sz_bottom;
+    flex: 1 1 auto;
+}
+
+#appbar-input {
+    flex: 1 1 100%;
+}
+
+#appbar-menu-content {
+    order: 0;
+    flex-basis: 320px;
+    ul {
+        list-style-type: none;
+        user-select: none;
+        width: 100%; height: 100%;
+        padding: 0; margin: 0;
+        display: flex;
+        flex-direction: column;
+        li {
+            width: 100%; height: @appbar_sz_top;
+            cursor: pointer;
+        }
+    }
+
+}
+
+#appbar-menu { .appbar-icon() }
+
+#appbar-sendmessage { .appbar-icon() }
+#appbar-attachment { .appbar-icon() }

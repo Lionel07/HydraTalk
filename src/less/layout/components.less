@@ -1,0 +1,25 @@
+sidebar {
+    position: relative;
+    display: block;
+    height: 100%;
+    order: 1;
+    flex: 1 1 100%;
+    min-width: 280px;
+    @media (min-width: @screen-size-sm){
+        flex: 1 1 50%;
+        max-width: 380px;
+    }
+    @media (min-width: @screen-size-md){
+        flex: 1 1 25%;
+    }
+}
+
+chat {
+    position: relative;
+    display: block;
+    height: 100%;
+    order: 2;
+    @media (min-width: @screen-size-sm){
+        flex: 1 1 75%
+    }
+}

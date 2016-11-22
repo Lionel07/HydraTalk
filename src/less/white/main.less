@@ -1,0 +1,27 @@
+// Appbar
+
+@textcolor: black;
+@sidebar_color: #AAA;
+@chat_color: #BBB;
+
+@appbar_increment: #222;
+
+body {
+    color: @textcolor;
+}
+
+sidebar {
+    background-color: @sidebar_color;
+}
+
+chat {
+    background-color: @chat_color;
+}
+
+.appbar-chat {
+    background-color: @chat_color - @appbar_increment;
+}
+
+.appbar-sidebar {
+    background-color: @sidebar_color - @appbar_increment;
+}

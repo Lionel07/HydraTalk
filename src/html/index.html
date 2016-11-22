@@ -6,32 +6,56 @@
     <title>Hydra Talk</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CSS -->
+    <meta name="MobileOptimized" content="width">
+    <meta name="description" content="A modern multi messaging client, that lets you talk to friends anywhere.">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="keywords" content="social, app, people, friends, talk, message, chat">
+</head>
+
+<body>
+
+    <sidebar>
+        <appbar class="appbar-header appbar-sidebar"></appbar>
+        <conversation-list id="conversation-list"></conversation-list>
+        <appbar class="appbar-footer appbar-sidebar">
+            <img id="appbar-useravatar"></img>
+            <div id="appbar-userstatus"></div>
+            <div id="appbar-username"></div>
+            <i id="appbar-menu" class="material-icons md-48">menu</i>
+        </appbar>
+    </sidebar>
+    <chat>
+        <appbar class="appbar-header appbar-chat hide-on-small"></appbar>
+        <chat-messages id="chat-messages"></chat-messages>
+        <appbar class="appbar-footer appbar-chat hide-on-small">
+            <i id="appbar-attachment" class="material-icons">attachment</i>
+            <input id="appbar-input" type="text" placeholder="Say something..."></input>
+            <i id="appbar-sendmessage" class="material-icons md-48">send</i>
+        </appbar>
+    </chat>
+    <div id="appbar-menu-content" style="display:none;">
+        <ul>
+            <li data-uri="debug">Debug Mode</li>
+            <li data-uri="profile">Profile</li>
+            <li data-uri="services">Services</li>
+            <li data-uri="settings">Settings</li>
+        </ul>
+    </div>
+
     <link href="bower/css/normalize.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
-    <!-- Scripts -->
-    <script src="bower/js/jquery.js"></script>
-    <script src="js/app.js"></script>
+    <link href="css/layout/main.css" rel="stylesheet">
+    <link href="css/darkflat/main.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed:300,400|Material+Icons" rel="stylesheet">
+
+    <script src="bower/js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
     <script>
         $(document).ready(function() {
             hydra.app.start();
             hydra.ui.start();
         });
     </script>
-</head>
 
-<body>
-<app>
-    <sidebar>
-        <appbar></appbar>
-        <conversation-list></conversation-list>
-        <appbar class="appbar-settings"></appbar>
-    </sidebar>
-    <chat>
-        <appbar style="background-color:#555"></appbar>
-        <chat-messages></chat-messages>
-        <appbar class="appbar-chat"></appbar>
-    </chat>
-</app>
 </body>
 </html>

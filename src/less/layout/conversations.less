@@ -1,0 +1,47 @@
+@conversation-element-height: 64px;
+@conversation-content-offset: 4px;
+
+#conversation-list {
+    position: relative;
+    height: calc(~'100%' - @appbar_sz_top + @appbar_sz_bottom);
+    top: @appbar_sz_top;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow:auto;
+}
+
+#noconversationtext {
+	position: relative;
+	top: 50%;
+	left: 80%;
+	transform: translate(-50%, -50%);
+}
+
+.conversation_content() {
+    position: relative;
+    width: calc(~'100%' - @conversation-element-height + @conversation-content-offset * 2);
+    float: left;
+    left: @conversation-content-offset * 3;
+    top: @conversation-content-offset * 2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversation-base {
+    position: relative;
+    height: @conversation-element-height;
+    cursor: pointer;
+    .conversation-icon {
+        position: relative;
+        width: @conversation-element-height - @conversation-content-offset * 2;
+        height: @conversation-element-height - @conversation-content-offset * 2;
+        top: @conversation-content-offset;
+        left: @conversation-content-offset;
+        float: left;
+    }
+    .conversation-name { .conversation_content()}
+    .conversation-time { display: none; }
+    .conversation-blurb { .conversation_content();  }
+}
