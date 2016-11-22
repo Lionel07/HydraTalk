@@ -44,4 +44,11 @@
     .conversation-name { .conversation_content()}
     .conversation-time { display: none; }
     .conversation-blurb { .conversation_content();  }
+    .provider-icon {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        right: @conversation-content-offset;
+        top: @conversation-element-height - @conversation-content-offset - 16px;
+    }
 }

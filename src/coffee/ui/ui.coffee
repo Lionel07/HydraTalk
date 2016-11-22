@@ -25,7 +25,6 @@ class UI
         @refresh()
         @setupNativeUI() if clientInfo.isElectron
         @showSetupDialog() if not @isSetup
-
         doDebugLog("UI","Starting")
 
     refresh: ->
@@ -60,11 +59,16 @@ class UI
         for i in hydra.database.conversations.conversations
             partner = hydra.database.people.findById(i.partner)
             last_message = i.getLastMessage()
-            display_text = "You:" if last_message.status > 0
-            display_text = "System: " if last_message.status is 0
-            display_text = "#{partner.name}: " if last_message.status < 0
-            display_text += last_message.content
-            element = @createConversationElement(i.partner,display_text,last_message.time)
+            if last_message?
+                display_text = "You:" if last_message.status > 0
+                display_text = "System: " if last_message.status is 0
+                display_text = "#{partner.name}: " if last_message.status < 0
+                display_text += last_message.content
+                time = last_message.time
+            else
+                display_text = ""
+                time = 0
+            element = @createConversationElement(i.partner,display_text,time)
             continue if element is null
             $(element).addClass("conversation-base-selected") if @currentConversation is i
             $(conversationlist).append(element)
@@ -105,7 +109,6 @@ class UI
         $(appbar_input).val("") # Clear out input field
 
     signalConversationClicked: (event) ->
-        console.log("Conversation Clicked")
         person_id = Number($(this).attr("person_id"))
         return if person_id is 0
         newConversation = hydra.database.conversations.getFromPID(person_id)
@@ -149,13 +152,15 @@ class UI
         person = hydra.database.people.findById(person_id)
         return null if person is null
         element = $("<div>").addClass("conversation-base")
-                    .attr("person_id", person_id)
+            .attr("person_id", person_id)
         icon = $("<img>").addClass("conversation-icon")
-                    .attr("src", person.avatar_location)
+            .attr("src", person.avatar_location)
+        provider_icon = $("<img>").addClass("provider-icon")
+            .attr("src", person.avatar_location)
         name = $("<div>").addClass("conversation-name").text(person.name)
         time = $("<div>").addClass("conversation-time").text(time)
         blurb = $("<div>").addClass("conversation-blurb").text(text)
-        element.append(icon, name, time, blurb)
+        element.append(icon, name, time, blurb, provider_icon)
         return element
 
 hydra.ui = new UI()

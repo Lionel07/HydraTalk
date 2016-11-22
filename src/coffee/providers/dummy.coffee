@@ -9,15 +9,15 @@ class DummyProvider extends hydra.Provider
             conversations: yes
             group: yes
         })
+        @dataGotten = false
     pull: () ->
-
         contacts = [
             new hydra.Person("Test A", null),
             new hydra.Person("Test B", null),
             new hydra.Person("Test C", null)
         ]
-
         conversations = [
+            new hydra.Conversation(),
             new hydra.Conversation(),
             new hydra.Conversation()
         ]
@@ -28,9 +28,12 @@ class DummyProvider extends hydra.Provider
         conversations[1].partner = 2
         conversations[1].addMessage(new hydra.Message("Hello!", 1))
         contacts[1].person_id = 2
+
+        type = if @dataGotten then "null" else "full"
+        @dataGotten = true
         return {
             packetType: "update",
-            updateType: "full",
+            updateType: type,
             status: 0,
             contacts: contacts,
             conversations: conversations
