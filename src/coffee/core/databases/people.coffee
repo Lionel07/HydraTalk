@@ -15,7 +15,7 @@ class PeopleDatabase
             @people.push(person)
         else
             @people = [person]
-        doDebugLog("ContactsDatabase", "Added #{person.name}")
+        debug.debug("PeopleDatabase", "Added #{person.name}")
 
     removeFromName: (name) ->
         for i in @people
@@ -23,8 +23,7 @@ class PeopleDatabase
                 @deleteIndex(@people.indexOf(i))
         return
 
-    removeFromIndex: (index) ->
-        @people.splice(index, 1)
+    removeFromIndex: (index) -> @people.splice(index, 1)
 
     findById: (id) ->
         result = (person for person in @people when person.person_id is id)
@@ -46,6 +45,17 @@ class PeopleDatabase
         localStorage["PeopleDatabase"] = data
         return true
 
+    parsePacket: (packet) ->
+        return false unless packet.contacts?
+        shouldRefresh = false
+        for person in packet.contacts
+            pid = person.person_id
+            dbentry = @findById(pid)
+            unless dbentry?
+                @add(person)
+                shouldRefresh = true
+
+        return shouldRefresh
 
 this.hydra.database = {} unless this.hydra.database?
 hydra.database.people = new PeopleDatabase()

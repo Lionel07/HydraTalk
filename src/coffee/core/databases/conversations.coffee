@@ -2,11 +2,8 @@ this.hydra = {} unless this.hydra?
 hydra = this.hydra
 
 class ConversationDatabase
-
     key = "ConversationDatabase"
-
-    constructor: ->
-        @conversations = []
+    constructor: -> @conversations = []
 
     add: (conversation) ->
         if @conversations?
@@ -40,6 +37,17 @@ class ConversationDatabase
                 return i
         return null
 
+    parsePacket: (packet) ->
+        return false unless packet.conversations?
+        shouldRefresh = false
+        for conversation in packet.conversations
+            pid = conversation.partner
+            dbentry = @getFromPID(pid)
+            unless dbentry?
+                @add(conversation)
+                shouldRefresh = true
+
+        return shouldRefresh
 
 this.hydra.database = {} unless this.hydra.database?
 hydra.database.conversations = new ConversationDatabase()

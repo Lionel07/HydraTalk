@@ -1,6 +1,6 @@
 @conversation-element-height: 64px;
 @conversation-content-offset: 4px;
-
+@conversation-provider-size: 22px;
 #conversation-list {
     position: relative;
     height: calc(~'100%' - @appbar_sz_top + @appbar_sz_bottom);
@@ -40,15 +40,18 @@
         top: @conversation-content-offset;
         left: @conversation-content-offset;
         float: left;
+        border-radius: @conversation-element-height;
     }
     .conversation-name { .conversation_content()}
     .conversation-time { display: none; }
     .conversation-blurb { .conversation_content();  }
     .provider-icon {
-        position: relative;
-        width: 16px;
-        height: 16px;
-        right: @conversation-content-offset;
-        top: @conversation-element-height - @conversation-content-offset - 16px;
+        position: absolute;
+        width: @conversation-provider-size;
+        height: @conversation-provider-size;
+        top: @conversation-element-height - @conversation-content-offset * 6;
+        left: @conversation-element-height - @conversation-content-offset * 6;
+        border-radius: @conversation-provider-size;
+        background-color: #FFFFFF;
     }
 }

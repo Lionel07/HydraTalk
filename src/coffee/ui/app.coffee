@@ -9,19 +9,18 @@ class App
         @messageQueue = []
         @shouldTick = true
         @tickObjects = [
-            {ticks: 2, repeatTo: 200, repeat: yes, callback: @doUpdate, name: "Update Providers"}
+            {ticks: 0, repeatTo: 20, repeat: yes, callback: @doUpdate, name: "Update Providers"}
         ]
         hydra.app = this unless hydra.app?
-        doDebugLog("App", "Created")
+        debug.debug("App", "Created")
 
     start: ->
-        doLog("App", "Starting")
+        debug.debug("App", "Starting")
         @setTickrate(4)
 
     setTickrate: =>
         clearInterval(@tick)
-        window.ticksPerSecond = global.tickrate
-        setInterval(@tick, 1000/global.tickrate) if @shouldTick
+        setInterval(@tick, 1000/config.tickrate.ticksPerSecond) if @shouldTick
 
     tick: =>
         return unless tickGuard is false
@@ -46,17 +45,10 @@ class App
         doRefresh = false
         switch packet.packetType
             when "update"
-                switch packet.updateType
-                    when "full"
-                        # TODO: Rewrite logic to be local to the database
-                        if packet.contacts isnt hydra.database.people.people
-                            doRefresh = true
-                        hydra.database.people.people = packet.contacts
-                        hydra.database.conversations.conversations = packet.conversations
-                    when "delta"
-                        return status
+                peopleRefresh = hydra.database.people.parsePacket(packet)
+                conversationRefresh = hydra.database.conversations.parsePacket(packet)
+                doRefresh = true if peopleRefresh || conversationRefresh
             when "null"
                 return
-
         hydra.ui.refresh() if doRefresh
 hydra.app = new App()

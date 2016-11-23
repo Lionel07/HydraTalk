@@ -17,24 +17,24 @@ class UI
     constructor: ->
         @isSetup = false
         @currentConversation = null
-        doDebugLog("UI","Created")
+        debug.debug("UI","Created")
 
     start: ->
         @isSetup = true if localStorage["setupComplete"] is "true"
         @setupSignals()
         @refresh()
-        @setupNativeUI() if clientInfo.isElectron
+        @setupNativeUI() if config.clientInfo.isElectron
         @showSetupDialog() if not @isSetup
-        doDebugLog("UI","Starting")
+        debug.debug("UI","Starting")
 
     refresh: ->
         @updateConversationList()
         @updateAppbarUserInfo()
         @displayConversation(@currentConversation) if @currentConversation?
-        doDebugLog("UI","Refreshing")
+        debug.debug("UI","Refreshing")
 
     setupNativeUI: ->
-        doLog("UI", "Native app, modifying UI accordingly")
+        debug.log("UI", "Native app, modifying UI accordingly")
 
     setupSignals: ->
         $(conversationlist).on("click", ".conversation-base", @signalConversationClicked)
@@ -92,16 +92,11 @@ class UI
     signalMenuItemClick: (event) ->
         $(appbar_menu_content).hide()
         clicked = $(this).attr("data-uri")
-        switch clicked
-            when "debug"
-                window.location.assign("./debug/index.html")
-            when "return_to_main"
-                window.location.assign("../index.html")
 
     signalMessageSent: (event) ->
         content = $(appbar_input).val()
         return unless @currentConversation? or content isnt ""
-        message = new Message(content, 1, "text", Date.now(), 0)
+        message = new hydra.Message(content, 1, "text", Date.now(), 0)
         hydra.ui.currentConversation.addMessage(message)
         hydra.database.conversations.save()
         hydra.ui.refresh()

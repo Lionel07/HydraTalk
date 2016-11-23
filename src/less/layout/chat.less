@@ -1,7 +1,36 @@
 #chat-messages {
     position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
     height: calc(~'100%' - @appbar_sz_top + @appbar_sz_bottom);
     top: @appbar_sz_top;
     width: 100%;
     overflow:auto;
+}
+.chat-message {
+    position: relative;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 60%;
+    clear:both;
+    margin: 4px 32px;
+    padding: 4px 16px;
+    word-wrap: break-word;
+    flex: 0 0 auto;
+}
+
+.chat-message-partner {
+    align-self: flex-start;
+}
+
+.chat-message-user {
+    align-self: flex-end;
+}
+
+.chat-message-image { width: 100%; }
+
+.chat-message-system {
+    align-self: flex-end;
 }

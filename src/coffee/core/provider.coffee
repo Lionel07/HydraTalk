@@ -6,7 +6,7 @@ class hydra.Provider
     constructor: (name, support) ->
         @name = name
         @support = support
-
+        @provider_id = 0
     init: () ->
 
     login: () ->
@@ -15,8 +15,7 @@ class hydra.Provider
 
     pull: () ->
         return {
-            packetType: "update",
-            updateType: "full",
+            packetType: "null",
             status: 0
         }
 
