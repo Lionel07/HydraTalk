@@ -41,6 +41,7 @@ class SystemProvider extends hydra.Provider
         Nothing is sent to the Hydra Talk servers. There is no registration, either.
         Please see <a href="privacy.html">the privacy statement</a> for more information.
         """
+        conversations[0].startDate = Date.now()
         conversations[0].addMessage(new hydra.Message(messageTextA, 0,"text", 0, @provider_id))
         conversations[0].addMessage(new hydra.Message(messageTextB, 0,"text", 0, @provider_id))
         conversations[0].addMessage(new hydra.Message(messageTextC, 0,"text", 0, @provider_id))

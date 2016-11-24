@@ -47,16 +47,14 @@ class UI
         return true
 
     updateConversationList: ->
-        no_conversations = true
-        if hydra.database.conversations.conversations isnt null
-            if hydra.database.conversations.conversations.length isnt 0
-                no_conversations = false
-        if no_conversations
-            element = "<div id='noconversationtext'>No Conversations</div>"
-            $(conversationlist).html(element)
-            return
+        conversations =  hydra.database.conversations.conversations.length
+        return $(conversationlist).html("<div id='noconversationtext'>No Conversations</div>") if conversations is 0
+        # Order the list
+        conversations_sorted = hydra.database.conversations.conversations.sort((a, b) ->
+            return b.startDate - a.startDate # HACK: Implement from time last message sent
+        )
         $(conversationlist).html("")
-        for i in hydra.database.conversations.conversations
+        for i in conversations_sorted
             partner = hydra.database.people.findById(i.partner)
             last_message = i.getLastMessage()
             if last_message?

@@ -10,8 +10,8 @@ class DummyProvider extends hydra.Provider
             group: yes
         })
         @provider_id = 65535
-        @tickno = 1
-        @testperson = 0
+        @phase = 0
+
     init: () ->
         super()
         @isReady = true
@@ -21,25 +21,30 @@ class DummyProvider extends hydra.Provider
         @isLoggedIn = true
 
     tick: () ->
-        @tickno--
-        return return {
-            packetType: "null",
-            status: 0
-        } unless @tickno is 0
-        @tickno = 1
-        @pull()
+        packet = null
+        switch @phase
+            when 0
+                contacts = [
+                    new hydra.Person("Dummy Provider", [@provider_id], 1)
+                ]
+                conversations = [
+                    new hydra.Conversation(1, [@provider_id]),
+                ]
+                conversations[0].startDate = Date.now() - 1000
+                packet = {
+                    packetType: "update"
+                    updateType: "full"
+                    status: 0
+                    contacts: contacts
+                    conversations: conversations
+                }
 
+        return packet
     pull: () ->
-        @testperson++
+
         return {
             packetType: "update"
             status: 0
-            contacts: [
-                new hydra.Person("Test #{@testperson}", [@provider_id], @testperson)
-            ]
-            conversations: [
-                new hydra.Conversation(@testperson, [@provider_id], no)
-            ]
         }
 
 hydra.providers.push(new DummyProvider())
