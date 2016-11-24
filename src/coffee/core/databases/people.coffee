@@ -15,7 +15,6 @@ class PeopleDatabase
             @people.push(person)
         else
             @people = [person]
-        debug.debug("PeopleDatabase", "Added #{person.name}")
 
     removeFromName: (name) ->
         for i in @people

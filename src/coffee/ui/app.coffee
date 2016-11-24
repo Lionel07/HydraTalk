@@ -15,11 +15,15 @@ class App
         debug.debug("App", "Created")
 
     start: ->
+        @init()
+        hydra.ui.start()
+
+    init: ->
         debug.debug("App", "Starting")
         @setTickrate(4)
 
     setTickrate: =>
-        clearInterval(@tick)
+        clearInterval(@tick) if @tick?
         setInterval(@tick, 1000/config.tickrate.ticksPerSecond) if @shouldTick
 
     tick: =>

@@ -14,7 +14,6 @@
     <link rel="shortcut icon" href="favicon.ico"/>
 	<link rel="icon" sizes="16x16 32x32 64x64" href="favicon.ico">
 	<meta name="msapplication-config" content="browserconfig.xml">
-
 </head>
 
 <body>
@@ -50,15 +49,8 @@
     <link href="css/layout/main.css" rel="stylesheet">
     <link href="css/darkflat/main.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Material+Icons" rel="stylesheet">
-
     <script src="bower/js/jquery.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
-    <script>
-        $(document).ready(function() {
-            hydra.app.start();
-            hydra.ui.start();
-        });
-    </script>
-
+    <script>$(document).ready(hydra.app.start());</script>
 </body>
 </html>

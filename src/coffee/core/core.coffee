@@ -29,9 +29,9 @@ class hydra.Conversation
         #TODO: Implement JSON -> Conversation Conversion
 
 class hydra.Person
-    constructor: (name = "", providers = []) ->
+    constructor: (name = "", providers = [], id = 0) ->
         @name = name
-        @person_id = 0
+        @person_id = id
         @avatar_location = "images/no_avatar.png"
         @providers = providers
 

@@ -53,7 +53,7 @@ class UI
                 no_conversations = false
         if no_conversations
             element = "<div id='noconversationtext'>No Conversations</div>"
-            #$(conversationlist).html(element)
+            $(conversationlist).html(element)
             return
         $(conversationlist).html("")
         for i in hydra.database.conversations.conversations
@@ -93,11 +93,11 @@ class UI
         $(appbar_menu_content).hide()
         clicked = $(this).attr("data-uri")
 
-    signalMessageSent: (event) ->
+    signalMessageSent: (event) =>
         content = $(appbar_input).val()
-        return unless @currentConversation? or content isnt ""
+        return if @currentConversation is null or content is ""
         message = new hydra.Message(content, 1, "text", Date.now(), 0)
-        hydra.ui.currentConversation.addMessage(message)
+        @currentConversation.addMessage(message)
         hydra.database.conversations.save()
         hydra.ui.refresh()
         hydra.ui.scrollChatBottom()

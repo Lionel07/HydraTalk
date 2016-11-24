@@ -7,11 +7,15 @@ class hydra.Provider
         @name = name
         @support = support
         @provider_id = 0
-    init: () ->
+        @isInitialised = false
+        @isLoggedIn = false
+        @isReady = true
 
+    init: () ->
+        @isInitialised = true
     login: () ->
 
-    write: (packet) ->
+    push: (packet) ->
 
     pull: () ->
         return {
