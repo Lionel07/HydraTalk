@@ -96,6 +96,7 @@ class UI
         return if @currentConversation is null or content is ""
         message = new hydra.Message(content, 1, "text", Date.now(), 0)
         @currentConversation.addMessage(message)
+        hydra.dispatch.sendMessage(@currentConversation.partner, message, @currentConversation.providers[0])
         hydra.database.conversations.save()
         hydra.ui.refresh()
         hydra.ui.scrollChatBottom()

@@ -45,9 +45,9 @@ class PeopleDatabase
         return true
 
     parsePacket: (packet) ->
-        return false unless packet.contacts?
+        return false unless packet.delta.contacts?
         shouldRefresh = false
-        for person in packet.contacts
+        for person in packet.delta.contacts
             pid = person.person_id
             dbentry = @findById(pid)
             unless dbentry?

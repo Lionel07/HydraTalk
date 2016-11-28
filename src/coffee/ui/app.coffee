@@ -1,22 +1,21 @@
 this.hydra = {} unless this.hydra?
 hydra = this.hydra
-global = window
+
 #TODO: Write App core logic
 
 class App
     tickGuard = false
     constructor: ->
-        @messageQueue = []
         @shouldTick = true
-        @tickObjects = [
-            {ticks: 0, repeatTo: 20, repeat: yes, callback: @doUpdate, name: "Update Providers"}
-        ]
-        hydra.app = this unless hydra.app?
-        debug.debug("App", "Created")
+        @tickObjects = []
 
     start: ->
         @init()
         hydra.ui.start()
+        @tickObjects = [
+            {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.dispatch.processProviders, name: "Providers"}
+            {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.dispatch.processMessageQueue, name: "Message Queue"}
+        ]
 
     init: ->
         debug.debug("App", "Starting")
@@ -41,18 +40,6 @@ class App
                 if task.repeat?
                     task.ticks = task.repeatTo
 
-    doUpdate: (task) =>
-        for provider in hydra.providers
-            @processProviderPacket(provider.tick())
 
-    processProviderPacket: (packet) ->
-        doRefresh = false
-        switch packet.packetType
-            when "update"
-                peopleRefresh = hydra.database.people.parsePacket(packet)
-                conversationRefresh = hydra.database.conversations.parsePacket(packet)
-                doRefresh = true if peopleRefresh || conversationRefresh
-            when "null"
-                return
-        hydra.ui.refresh() if doRefresh
+
 hydra.app = new App()

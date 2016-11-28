@@ -9,7 +9,7 @@ class hydra.Provider
         @provider_id = 0
         @isInitialised = false
         @isLoggedIn = false
-        @isReady = true
+        @isReady = false
 
     init: () ->
         @isInitialised = true
@@ -18,10 +18,19 @@ class hydra.Provider
     push: (packet) ->
 
     pull: () ->
+        return nullPacket
+
+    tick: () -> @pull()
+
+    nullPacket: () ->
         return {
-            packetType: "null",
+            packetType: "null"
             status: 0
         }
 
-    tick: () ->
-        @pull()
+    updatePacket: (type, data) ->
+        packet = @nullPacket()
+        packet.packetType = "update"
+        packet.updateType = type
+        packet.delta = data
+        return packet

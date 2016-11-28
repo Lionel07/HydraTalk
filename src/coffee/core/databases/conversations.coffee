@@ -38,14 +38,22 @@ class ConversationDatabase
         return null
 
     parsePacket: (packet) ->
-        return false unless packet.conversations?
+        return false unless packet.delta.conversations?
+        conversations = packet.delta.conversations
         shouldRefresh = false
-        for conversation in packet.conversations
-            pid = conversation.partner
-            dbentry = @getFromPID(pid)
-            unless dbentry?
-                @add(conversation)
+        if packet.updateType is "delta"
+            for conversation in conversations
+                dbentry = @getFromPID(conversation.partner_id)
+                dbentry.addMessage(message) for message in conversation.messages
                 shouldRefresh = true
+
+        if packet.updateType is "full"
+            for conversation in conversations
+                pid = conversation.partner
+                dbentry = @getFromPID(pid)
+                unless dbentry?
+                    @add(conversation)
+                    shouldRefresh = true
 
         return shouldRefresh
 
