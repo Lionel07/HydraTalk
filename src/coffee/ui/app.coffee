@@ -13,9 +13,10 @@ class App
         @init()
         hydra.ui.start()
         @tickObjects = [
-            {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.dispatch.processProviders, name: "Providers"}
-            {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.dispatch.processMessageQueue, name: "Message Queue"}
+            {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.post.tick, name: "Update Messaging System"}
+            {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.providertask.tick, name: "Update Providers"}
         ]
+        hydra.post.registerHandler(hydra.post.address.main, @mail)
 
     init: ->
         debug.debug("App", "Starting")
@@ -31,6 +32,8 @@ class App
         @processTasks()
         tickGuard = false
         return
+
+    mail: (message) ->
 
     processTasks: ->
         for task in @tickObjects

@@ -26,6 +26,7 @@ class UI
         @setupNativeUI() if config.clientInfo.isElectron
         @showSetupDialog() if not @isSetup
         debug.debug("UI","Starting")
+        hydra.post.registerHandler(hydra.post.address.ui, @mail)
 
     refresh: ->
         @updateConversationList()
@@ -96,7 +97,13 @@ class UI
         return if @currentConversation is null or content is ""
         message = new hydra.Message(content, 1, "text", Date.now(), 0)
         @currentConversation.addMessage(message)
-        hydra.dispatch.sendMessage(@currentConversation.partner, message, @currentConversation.providers[0])
+        data = {
+            providers: @currentConversation.providers
+            message: message
+            partner: @currentConversation.partner
+        }
+        postdata = hydra.post.createMessage(hydra.post.address.ui, [hydra.post.address.providers], "sent_message", data)
+        hydra.post.send(postdata)
         hydra.database.conversations.save()
         hydra.ui.refresh()
         hydra.ui.scrollChatBottom()
@@ -156,5 +163,7 @@ class UI
         blurb = $("<div>").addClass("conversation-blurb").text(text)
         element.append(icon, name, time, blurb, provider_icon)
         return element
+
+    mail: (message) ->
 
 hydra.ui = new UI()

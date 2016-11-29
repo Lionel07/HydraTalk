@@ -1,6 +1,6 @@
 this.hydra = {} unless this.hydra?
 hydra = this.hydra
-this.hydra.providers = {} unless this.hydra.providers?
+this.hydra.providers = [] unless this.hydra.providers?
 
 class SampleProvider extends hydra.Provider
     constructor: () ->
@@ -18,11 +18,11 @@ class SampleProvider extends hydra.Provider
     login: () ->
         @isLoggedIn = true
 
-    tick: () =>
-        @pull()
-
+    tick: () ->
+        
     write: (input) ->
-        return true
+        console.log "Write"
 
     pull: () ->
-        @nullPacket()
+
+hydra.providers.push(new SampleProvider())

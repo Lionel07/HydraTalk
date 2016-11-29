@@ -15,22 +15,9 @@ class hydra.Provider
         @isInitialised = true
     login: () ->
 
-    push: (packet) ->
+    push: () ->
 
     pull: () ->
-        return nullPacket
+        return null
 
     tick: () -> @pull()
-
-    nullPacket: () ->
-        return {
-            packetType: "null"
-            status: 0
-        }
-
-    updatePacket: (type, data) ->
-        packet = @nullPacket()
-        packet.packetType = "update"
-        packet.updateType = type
-        packet.delta = data
-        return packet
