@@ -11,7 +11,6 @@ class App
 
     start: ->
         @init()
-        hydra.ui.start()
         @tickObjects = [
             {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.post.tick, name: "Update Messaging System"}
             {ticks: 0, repeatTo: 1, repeat: yes, callback: hydra.providertask.tick, name: "Update Providers"}

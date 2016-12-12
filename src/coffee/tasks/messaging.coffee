@@ -46,6 +46,7 @@ class PostOffice
                 debug.error("PostOffice", "Can't reach #{Object.keys(@address)[message.to]}")
 
     send: (message) ->
+        @debugPrint(message)
         @queue.push(message) if message isnt null
 
 this.hydra.post = new PostOffice()

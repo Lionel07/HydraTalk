@@ -13,6 +13,8 @@ appbar_menu_content = "#appbar-menu-content"
 appbar_username = "#appbar-username"
 appbar_avatar = "#appbar-useravatar"
 
+storage = this.localStorage
+
 class UI
     constructor: ->
         @isSetup = false
@@ -20,7 +22,7 @@ class UI
         debug.debug("UI","Created")
 
     start: ->
-        @isSetup = true if localStorage["setupComplete"] is "true"
+        @isSetup = true if storage["setupComplete"] is "true"
         @setupSignals()
         @refresh()
         @setupNativeUI() if config.clientInfo.isElectron
@@ -45,6 +47,7 @@ class UI
         )
         $(appbar_menu).click(@signalMenuClick)
         $(appbar_menu_content).on("click", "li", @signalMenuItemClick)
+
         return true
 
     updateConversationList: ->
@@ -91,6 +94,9 @@ class UI
     signalMenuItemClick: (event) ->
         $(appbar_menu_content).hide()
         clicked = $(this).attr("data-uri")
+        switch clicked
+            when "settings"
+                hydra.ui.createSettingsDialog()
 
     signalMessageSent: (event) =>
         content = $(appbar_input).val()
@@ -121,15 +127,51 @@ class UI
         $(chat).scrollTop($(chat)[0].scrollHeight)
 
     showSetupDialog: ->
-        $("#setup-dialog").show()
-        $("#setup-dialog-confirm").click(() ->
-            $("#setup-dialog").hide()
-            hydra.currentUser.user.name = $("#setup-name").val()
-            hydra.currentUser.user.avatar_location = $("#setup-avatar").val()
-            hydra.currentUser.save()
-            localStorage["setupComplete"] = "true"
-            @isSetup = true
-            @updateAppbarUserInfo()
+        dialog = @createDialog("dialog-setup", "dialog-medium")
+        leftpane = $("<div>").addClass("dialog-panel-left")
+        rightpane = $("<div>").addClass("dialog-panel-right")
+
+        leftpanetitle = $("<div>").addClass("dialog-panel-left-titlepanel")
+        leftpanetitle.append($("<span>Setup</span>"))
+
+        closebutton = $("<div id='dialog-settings-close'>&times;</div>")
+
+        leftpane.append(leftpanetitle)
+        leftpane.append(closebutton)
+        dialog.append(leftpane)
+        dialog.append(rightpane)
+
+        # Setup Events
+        $("#dialog-settings-close").on("click", ()->
+            storage["setupComplete"] = "true"
+            $("#dialog-setup").remove()
+        )
+
+    createDialog: (id = "", size = "dialog-large") ->
+        return if id is ""
+        element = $("<dialogbox>").addClass(size)
+        element.attr("id", id)
+        $("#dialoghost").append(element)
+        return element
+
+    createSettingsDialog: ->
+        dialog = @createDialog("dialog-settings", "dialog-large")
+        leftpane = $("<div>").addClass("dialog-panel-left")
+        rightpane = $("<div>").addClass("dialog-panel-right")
+
+        leftpanetitle =$("<div>").addClass("dialog-panel-left-titlepanel")
+        leftpanetitle.append($("<span>Settings</span>"))
+
+        closebutton = $("<div id='dialog-settings-close'>&times;</div>")
+
+        leftpane.append(leftpanetitle)
+        leftpane.append(closebutton)
+        dialog.append(leftpane)
+        dialog.append(rightpane)
+
+        # Setup Events
+        $("#dialog-settings-close").on("click", ()->
+            $("#dialog-settings").remove()
         )
 
     showWarningDialog: ->
@@ -164,6 +206,8 @@ class UI
         element.append(icon, name, time, blurb, provider_icon)
         return element
 
-    mail: (message) ->
-
+    mail: (message) =>
+        switch message.type
+            when "refresh"
+                @refresh()
 hydra.ui = new UI()

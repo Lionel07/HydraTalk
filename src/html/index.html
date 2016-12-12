@@ -1,27 +1,24 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en-US">
 <head>
     <!-- Metadata -->
     <title>Hydra Talk</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="MobileOptimized" content="width">
     <meta name="description" content="A modern multi messaging client, that lets you talk to friends anywhere.">
-    <meta name="HandheldFriendly" content="true">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="keywords" content="social, app, people, friends, talk, message, chat">
     <link rel="shortcut icon" href="favicon.ico"/>
-	<link rel="icon" sizes="16x16 32x32 64x64" href="favicon.ico">
-	<meta name="msapplication-config" content="browserconfig.xml">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="favicon.ico">
 </head>
 
 <body>
+    <appmain>
     <sidebar>
         <appbar class="appbar-header appbar-sidebar"></appbar>
         <conversation-list id="conversation-list"></conversation-list>
         <appbar class="appbar-footer appbar-sidebar">
-            <img id="appbar-useravatar"></img>
+            <img id="appbar-useravatar"/>
             <div id="appbar-userstatus"></div>
             <div id="appbar-username"></div>
             <i id="appbar-menu" class="material-icons md-48">menu</i>
@@ -32,7 +29,7 @@
         <chat-messages id="chat-messages"></chat-messages>
         <appbar class="appbar-footer appbar-chat hide-on-small">
             <i id="appbar-attachment" class="material-icons">attachment</i>
-            <input id="appbar-input" type="text" placeholder="Say something..."></input>
+            <input id="appbar-input" type="text" placeholder="Say something..."/>
             <i id="appbar-sendmessage" class="material-icons md-48">send</i>
         </appbar>
     </chat>
@@ -44,13 +41,19 @@
             <li data-uri="settings">Settings</li>
         </ul>
     </div>
-
     <link href="bower/css/normalize.css" rel="stylesheet">
     <link href="css/layout/main.css" rel="stylesheet">
-    <link href="css/darkflat/main.css" rel="stylesheet">
+    <link href="css/materialblue/main.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Material+Icons" rel="stylesheet">
     <script src="bower/js/jquery.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
-    <script>$(document).ready(hydra.app.start());</script>
+    <script>$(document).ready(function() {
+        hydra.app.start()
+        hydra.ui.start()
+    });</script>
+    </appmain>
+    <dialoghost id="dialoghost">
+    </dialoghost>
+
 </body>
 </html>

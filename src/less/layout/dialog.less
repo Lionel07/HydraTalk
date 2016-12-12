@@ -1,0 +1,72 @@
+dialoghost {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+dialogbox {
+    z-index: 100;
+    display: flex;
+    pointer-events: auto;
+}
+
+.dialog-large {
+    width: 75%;
+    height: 75%;
+    min-width: 640px;
+    max-width: 1024px;
+    min-height: 480px;
+}
+.dialog-medium {
+    width: 75%;
+    height: 75%;
+    min-width: 640px;
+    max-width: 1024px;
+    min-height: 480px;
+}
+
+.dialog-small {
+    width: 50%;
+    height: 25%;
+    min-width: 240px;
+    max-width: 640px;
+    min-height: 240px;
+}
+
+.dialog-panel-left {
+    width: 240px;
+    height: 100%;
+    color: black;
+}
+
+.dialog-panel-left-titlepanel {
+    width: 240px;
+    height: 48px;
+    background-color: #EEEEEE;
+    color: black;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 48px;       /* the same as your div height */
+}
+
+#dialog-settings-close {
+    position: relative;
+    height: 24px;
+    bottom: 0;
+    background-color: #AAAAAA;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 24px;       /* the same as your div height */
+    font-size: 26px;
+}
+
+.dialog-panel-right{
+    height: 100%;
+}
