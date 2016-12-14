@@ -56,7 +56,7 @@ class ProviderTask
         for mapping in @uidMappings
             if mapping.provider is provider_id
                 if uid is mapping.uid
-                    return mapping.uid
+                    return mapping.id
         return 0
     processConversations: (data, provider_id) ->
         return unless data?

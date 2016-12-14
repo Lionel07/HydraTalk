@@ -1,0 +1,37 @@
+// Appbar
+.appbar-chat {
+    background-color: @color_primary;
+    .materialShadow();
+}
+
+.appbar-sidebar {
+    background-color: @color_primary - #111;
+    .materialShadow();
+}
+
+#appbar-menu-content {
+    background-color: @color_primary - #222;
+    ul {
+        li { background-color: #333; }
+        li:hover {background-color: #444;}
+    }
+}
+
+.conversation-base {
+    background-color: @conversation_color;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size:@text-conversation-blurb-size;
+    color: #CCCCCC;
+    .conversation-name {
+        font-family: 'Roboto', sans-serif;
+        font-size:@text-conversation-name-size;
+        color: @textcolor;
+    }
+    .materialShadow();
+    z-index: 1;
+}
+
+.conversation-base-selected {
+    background-color: @conversation_color - #0F0F0F;
+    z-index: 0;
+}

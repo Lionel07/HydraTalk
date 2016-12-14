@@ -2,20 +2,19 @@ this.hydra = {} unless this.hydra?
 hydra = this.hydra
 this.hydra.providers = [] unless this.hydra.providers?
 
-class SampleProvider extends hydra.Provider
+class TestingProvider extends hydra.Provider
     constructor: () ->
-        super("Sample Provider", {
+        super("Test Provider", {
             contacts: yes
             conversations: yes
             group: yes
         })
-        @provider_id = 1
+        @provider_id = 2
         @nextUpdate = {
             contacts: [
                 {status: "new", name: "Sample", uid: 1, avatar: "images/icons/hydra_talk_inverted.png"},
                 {status: "new", name: "Test A", uid: 2, avatar: "images/sample_avatars/sample_a.jpg"},
                 {status: "new", name: "Test B", uid: 3, avatar: "images/sample_avatars/sample_b.jpg"}
-
             ]
             conversations: [
                 {status: "new", uid: 1, messages: [
@@ -45,4 +44,4 @@ class SampleProvider extends hydra.Provider
 
     pull: () ->
 
-hydra.providers.push(new SampleProvider())
+hydra.providers.push(new TestingProvider())

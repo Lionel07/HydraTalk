@@ -88,8 +88,7 @@ class UI
             $(chat).append(hydra.ui.createMessageElement(message))
         @scrollChatBottom()
 
-    signalMenuClick: (event) ->
-        $(appbar_menu_content).toggle()
+    signalMenuClick: (event) -> $(appbar_menu_content).toggle()
 
     signalMenuItemClick: (event) ->
         $(appbar_menu_content).hide()
@@ -97,34 +96,51 @@ class UI
         switch clicked
             when "settings"
                 hydra.ui.createSettingsDialog()
+            when "debug"
+                hydra.ui.createSettingsDialog()
+
+    signalSettingClick: (event) ->
+        clicked = $(this).attr("data-uri")
+        console.log(clicked)
+        switch clicked
+            when "close"
+                $("#dialog-settings").remove()
+            when "d-panel-debug"
+                hydra.ui.settings.debug()
+
 
     signalMessageSent: (event) =>
         content = $(appbar_input).val()
         return if @currentConversation is null or content is ""
+
         message = new hydra.Message(content, 1, "text", Date.now(), 0)
         @currentConversation.addMessage(message)
+
         data = {
             providers: @currentConversation.providers
             message: message
             partner: @currentConversation.partner
         }
-        postdata = hydra.post.createMessage(hydra.post.address.ui, [hydra.post.address.providers], "sent_message", data)
+
+        postdata = hydra.post.createMessage(hydra.post.address.ui,
+            [hydra.post.address.providers], "sent_message", data)
         hydra.post.send(postdata)
         hydra.database.conversations.save()
-        hydra.ui.refresh()
-        hydra.ui.scrollChatBottom()
+
+        @refresh()
+        @scrollChatBottom()
         $(appbar_input).val("") # Clear out input field
 
     signalConversationClicked: (event) ->
         person_id = Number($(this).attr("person_id"))
         return if person_id is 0
+
         newConversation = hydra.database.conversations.getFromPID(person_id)
         hydra.ui.currentConversation = newConversation unless newConversation is null
         hydra.ui.refresh()
         hydra.ui.scrollChatBottom() unless newConversation is null
 
-    scrollChatBottom: ->
-        $(chat).scrollTop($(chat)[0].scrollHeight)
+    scrollChatBottom: -> $(chat).scrollTop($(chat)[0].scrollHeight)
 
     showSetupDialog: ->
         dialog = @createDialog("dialog-setup", "dialog-medium")
@@ -154,6 +170,8 @@ class UI
         $("#dialoghost").append(element)
         return element
 
+    createDialogPanelItem: (text, id) -> $("<div class='dialog-panel-item' id='#{id}' data-uri='#{id}'>#{text}</div>")
+
     createSettingsDialog: ->
         dialog = @createDialog("dialog-settings", "dialog-large")
         leftpane = $("<div>").addClass("dialog-panel-left")
@@ -162,19 +180,24 @@ class UI
         leftpanetitle =$("<div>").addClass("dialog-panel-left-titlepanel")
         leftpanetitle.append($("<span>Settings</span>"))
 
-        closebutton = $("<div id='dialog-settings-close'>&times;</div>")
+        closebutton = $("<div id='dialog-settings-close' data-uri='close'>&times;</div>")
 
         leftpane.append(leftpanetitle)
         leftpane.append(closebutton)
+
+        leftpane.append(@createDialogPanelItem("General", "d-panel-general"))
+        leftpane.append(@createDialogPanelItem("Providers", "d-panel-providers"))
+        leftpane.append(@createDialogPanelItem("Layout & Appearence", "d-panel-layout"))
+        leftpane.append(@createDialogPanelItem("Chat", "d-panel-chat"))
+        leftpane.append(@createDialogPanelItem("Notifications", "d-panel-notifications"))
+        leftpane.append(@createDialogPanelItem("Debug", "d-panel-debug"))
+        leftpane.append(@createDialogPanelItem("About", "d-panel-about"))
+
         dialog.append(leftpane)
         dialog.append(rightpane)
 
         # Setup Events
-        $("#dialog-settings-close").on("click", ()->
-            $("#dialog-settings").remove()
-        )
-
-    showWarningDialog: ->
+        $(".dialog-panel-left").on("click", "div",@signalSettingClick)
 
     createMessageElement: (message) ->
         return null unless message?
@@ -199,7 +222,7 @@ class UI
         icon = $("<img>").addClass("conversation-icon")
             .attr("src", person.avatar_location)
         provider_icon = $("<img>").addClass("provider-icon")
-            .attr("src", person.avatar_location)
+            .attr("src", "images/icons/hydra_talk_inverted.png")
         name = $("<div>").addClass("conversation-name").text(person.name)
         time = $("<div>").addClass("conversation-time").text(time)
         blurb = $("<div>").addClass("conversation-blurb").text(text)

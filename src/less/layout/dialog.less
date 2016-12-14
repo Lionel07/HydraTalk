@@ -53,20 +53,52 @@ dialogbox {
     font-size: 18px;
     text-align: center;
     vertical-align: middle;
-    line-height: 48px;       /* the same as your div height */
+    line-height: 48px;
+    border-bottom: 1px solid #444;
+}
+
+.dialog-panel-item {
+    text-align: start;
+    vertical-align: middle;
+    height: 48px;
+    line-height: 48px;
+    padding-left: 48px;
+    cursor: pointer;
 }
 
 #dialog-settings-close {
     position: relative;
     height: 24px;
-    bottom: 0;
-    background-color: #AAAAAA;
     text-align: center;
     vertical-align: middle;
-    line-height: 24px;       /* the same as your div height */
+    line-height: 24px;
     font-size: 26px;
+    cursor: pointer;
 }
 
 .dialog-panel-right{
     height: 100%;
+    width: 100%;
+}
+
+.dialog-panel-header {
+    width: 100%;
+    text-align: start;
+    vertical-align: middle;
+    height: 48px;
+    line-height: 48px;
+    padding-left: 48px;
+    font-size: 24px;
+}
+
+.dialog-panel-list {
+    padding: 16px;
+}
+
+.dialog-panel-list-item {
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
 }

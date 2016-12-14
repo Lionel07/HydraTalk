@@ -1,5 +1,5 @@
-@appbar_sz_top: 48px;
-@appbar_sz_bottom: 32px;
+@appbar_sz_top: 32px;
+@appbar_sz_bottom: 40px;
 
 appbar {
     position: absolute;
@@ -7,8 +7,7 @@ appbar {
     height: @appbar_sz_top; width: 100%;
     padding: 0; margin: 0;
     flex: 1 1 auto;
-    z-index: 1;
-
+    z-index: 10;
 }
 
 .appbar-header {
@@ -26,6 +25,7 @@ appbar {
     height: @appbar_sz_bottom;
     font-size: @appbar_sz_bottom;
     flex: 1 1 auto;
+    cursor: pointer;
 }
 
 #appbar-input {

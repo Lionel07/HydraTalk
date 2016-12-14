@@ -1,0 +1,8 @@
+{
+    "short_name": "Hydra",
+    "name": "Hydra Talk",
+    "icons": [],
+    "start_url": "/index.html",
+    "display": "standalone",
+    "orientation": "portrait"
+}
