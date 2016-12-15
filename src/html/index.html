@@ -2,7 +2,6 @@
 
 <html lang="en-US">
 <head>
-    <!-- Metadata -->
     <title>Hydra Talk</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +29,7 @@
         <appbar class="appbar-header appbar-chat hide-on-small"></appbar>
         <chat-messages id="chat-messages" class="hide-on-small"></chat-messages>
         <appbar class="appbar-footer appbar-chat hide-on-small">
-            <i id="appbar-attachment" class="material-icons">attachment</i>
+            <i id="appbar-switchprovider" class="material-icons">at</i>
             <input id="appbar-input" type="text" placeholder="Say something..."/>
             <i id="appbar-sendmessage" class="material-icons md-48">send</i>
         </appbar>
@@ -43,16 +42,20 @@
             <li data-uri="settings">Settings</li>
         </ul>
     </div>
+
     <link href="bower/css/normalize.css" rel="stylesheet">
     <link href="css/layout/main.css" rel="stylesheet">
     <link href="css/materialblue/main.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Material+Icons" rel="stylesheet">
     <script src="bower/js/jquery.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
-    <script>$(document).ready(function() {
+    
+    <script>
+    $(document).ready(function() {
         hydra.app.start()
         hydra.ui.start()
-    });</script>
+    });
+    </script>
     </appmain>
     <dialoghost id="dialoghost"></dialoghost>
 

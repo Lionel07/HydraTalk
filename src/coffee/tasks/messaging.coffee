@@ -33,8 +33,7 @@ class PostOffice
             firstDone = true
         log = "#{keyNames[message.from]} => [#{recipients}]: (#{message.type}) #{Object.keys(message.data)}"
         debug.log("PostOffice",log)
-    tick: =>
-        @processMessage() if @queue.length > 0
+    tick: => @processMessage() if @queue.length > 0
     registerHandler: (address, handler) -> @handlers[address] = handler
     processMessage: ->
         message = @queue.pop()

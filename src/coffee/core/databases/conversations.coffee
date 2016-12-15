@@ -57,5 +57,6 @@ class ConversationDatabase
 
         return shouldRefresh
 
+
 this.hydra.database = {} unless this.hydra.database?
 hydra.database.conversations = new ConversationDatabase()

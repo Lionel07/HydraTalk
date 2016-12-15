@@ -18,7 +18,7 @@ class App
         hydra.post.registerHandler(hydra.post.address.main, @mail)
 
     init: ->
-        debug.debug("App", "Starting")
+        debug.log("App", "Starting")
         @setTickrate(4)
 
     setTickrate: =>

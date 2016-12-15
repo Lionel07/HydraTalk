@@ -39,17 +39,34 @@ class ProviderTask
             refresh = hydra.post.createMessage(hydra.post.address.providers, [hydra.post.address.ui], "refresh")
             hydra.post.send(refresh)
 
+    getProviderName: (id) ->
+        for provider in hydra.providers
+            if provider.provider_id is id
+                return provider.name
+        return "Unknown"
+
     processContacts: (data, provider_id) ->
         return unless data?
         for contact in data
             switch contact.status
                 when "new"
+                    # Initialise the person
                     person = new hydra.Person(contact.name, [provider_id])
                     person.avatar_location = contact.avatar
-                    id = hydra.database.people.assignID person
-                    mapping = {provider: provider_id, uid: contact.uid, id: id}
-                    @uidMappings.push mapping
-                    hydra.database.people.add person
+                    isDuplicate = hydra.database.people.scanDuplicates(person)
+                    mapping = null
+                    if isDuplicate.res is false
+                        id = hydra.database.people.assignID person
+                        mapping = {provider: provider_id, uid: contact.uid, id: id}
+                        @uidMappings.push mapping
+                        hydra.database.people.add person
+                    else
+                        update = isDuplicate.person
+                        update.providers.push(provider_id)
+                        mapping = {provider: provider_id, uid: contact.uid, id: update.person_id}
+                        @uidMappings.push mapping
+
+                    debug.debug("ProviderDispatch","New Contact (UID #{mapping.uid} -> ID #{mapping.id}), #{if isDuplicate.res then "dupe" else "unique"}")
                     @queueUIRefresh = true
 
     mapUidtoId: (provider_id, uid) ->
@@ -64,17 +81,24 @@ class ProviderTask
             switch conversation.status
                 when "new"
                     partner_id = @mapUidtoId(provider_id, conversation.uid)
-                    if partner_id is 0
-                        return
-                    newconv = new hydra.Conversation(partner_id, [provider_id], no)
-                    @processMessages(newconv, conversation.messages, provider_id)
-                    hydra.database.conversations.add newconv
+                    continue if partner_id is 0
+                    conv = hydra.database.conversations.getFromPID(partner_id)
+                    debug.debug("ProviderDispatch","New Conversation (PID: #{partner_id})")
+                    if conv isnt null
+                        conv.providers.push(provider_id)
+                        @processMessages(conv, conversation.messages, provider_id)
+                    else
+                        conv = new hydra.Conversation(partner_id, [provider_id], no)
+                        conv.startDate = conversation.startDate if conversation.startDate?
+                        @processMessages(conv, conversation.messages, provider_id)
+                        hydra.database.conversations.add conv
                     @queueUIRefresh = true
-
+                    conv.sort()
                 when "update"
                     partner_id = @mapUidtoId(provider_id, conversation.uid)
                     conv = hydra.database.conversations.getFromPID(partner_id)
                     @processMessages(conv, conversation.messages, provider_id)
+                    conv.sort()
 
     processMessages: (conversation, messages, provider_id) ->
         return unless messages?

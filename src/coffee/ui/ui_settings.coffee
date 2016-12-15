@@ -6,28 +6,32 @@ hydra.ui.settings = {}
 hydra.ui.settings.debug = () ->
     panel = $(".dialog-panel-right")
     panel.html("")
+    messages_total = 0
+    providers_total = 0
+    conversations_total = hydra.database.conversations.conversations.length
+    for conversation in hydra.database.conversations.conversations
+        messages_total += conversation.messages.length
+        providers_total += conversation.providers.length
+
+    contact_text = """
+    Contacts: #{hydra.database.people.people.length} </br>
+    Next Contact ID: #{hydra.database.people.nextId}
+    """
+    conversation_text = """
+    Conversations: #{conversations_total} </br>
+    Providers Per Conversation (avg): #{providers_total / conversations_total}
+    """
+    message_text = "Messages: #{messages_total} in total"
 
     header = $("<div>").addClass("dialog-panel-header").text("Debug")
     list = $("<div>").addClass("dialog-panel-list")
-    contactsdb = $("<div>").addClass("dialog-panel-list-item")
-    conversationdb = $("<div>").addClass("dialog-panel-list-item")
-    message_count = $("<div>").addClass("dialog-panel-list-item")
-    clear_all = $("<div>").addClass("dialog-panel-list-item")
-    messages_total = 0
-    for conversation in hydra.database.conversations.conversations
-        messages_total += conversation.messages.length
+    contactsdb = hydra.ui.createDialogListItem("contacts",contact_text)
+    conversationdb = hydra.ui.createDialogListItem("conversations",conversation_text)
+    message_count = hydra.ui.createDialogListItem("message_cnt",message_text)
 
-    contact_text = "ContactsDB: #{hydra.database.people.people.length} people, Next ID: #{hydra.database.people.nextId}"
-    conversation_text = "ConversationsDB: #{hydra.database.conversations.conversations.length} conversations"
-    message_text = "Messages: #{messages_total} in total"
-
-    contactsdb.text(contact_text)
-    conversationdb.text(conversation_text)
-    message_count.text(message_text)
-    clear_all.html("Clear Everything <div class='dialog-panel-switch'></div>")
     list.append(contactsdb)
     list.append(conversationdb)
     list.append(message_count)
-    list.append(clear_all)
+
     panel.append(header)
     panel.append(list)

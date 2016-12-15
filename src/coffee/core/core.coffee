@@ -9,8 +9,6 @@ class hydra.Message
         @content_type = type
         @time = time
         @provider = provider
-    jsonToObject: (json) ->
-        #TODO: Implement JSON -> Message Conversion
 
 class hydra.Conversation
     constructor: (partner = 0, providers = [], group = no) ->
@@ -24,10 +22,10 @@ class hydra.Conversation
         @messages.push message if message?
 
     getLastMessage: -> @messages[@messages.length - 1]
-
-    jsonToObject: (json) ->
-        #TODO: Implement JSON -> Conversation Conversion
-
+    sort: () ->
+        @messages.sort((a, b)->
+            a.time - b.time
+        )
 class hydra.Person
     constructor: (name = "", providers = [], id = 0) ->
         @name = name
@@ -36,11 +34,3 @@ class hydra.Person
         @providers = providers
 
     isValid: -> @name isnt "" and @person_id isnt 0
-
-    jsonToObject: (json) ->
-        ret = new Person()
-        ret.name = json.name
-        ret.person_id = json.person_id
-        ret.avatar_location = json.avatar_location
-        ret.providers = json.providers
-        return ret

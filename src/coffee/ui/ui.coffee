@@ -19,7 +19,8 @@ class UI
     constructor: ->
         @isSetup = false
         @currentConversation = null
-        debug.debug("UI","Created")
+        @currentSelectedProvider = 1
+        debug.log("UI","Created")
 
     start: ->
         @isSetup = true if storage["setupComplete"] is "true"
@@ -27,14 +28,13 @@ class UI
         @refresh()
         @setupNativeUI() if config.clientInfo.isElectron
         @showSetupDialog() if not @isSetup
-        debug.debug("UI","Starting")
+        debug.log("UI","Starting")
         hydra.post.registerHandler(hydra.post.address.ui, @mail)
 
     refresh: ->
         @updateConversationList()
         @updateAppbarUserInfo()
         @displayConversation(@currentConversation) if @currentConversation?
-        debug.debug("UI","Refreshing")
 
     setupNativeUI: ->
         debug.log("UI", "Native app, modifying UI accordingly")
@@ -55,7 +55,7 @@ class UI
         return $(conversationlist).html("<div id='noconversationtext'>No Conversations</div>") if conversations is 0
         # Order the list
         conversations_sorted = hydra.database.conversations.conversations.sort((a, b) ->
-            return b.startDate - a.startDate # HACK: Implement from time last message sent
+            return b.getLastMessage().time - a.getLastMessage().time
         )
         $(conversationlist).html("")
         for i in conversations_sorted
@@ -84,7 +84,13 @@ class UI
     displayConversation: (conversation) ->
         $(chat).html("")
         return unless conversation?
+        current_provider = 0
         for message in conversation.messages
+            # Display Provider header
+            if current_provider != message.provider
+                current_provider = message.provider
+                provider_name = hydra.providertask.getProviderName(current_provider)
+                $(chat).append("<div class='chat-provider-header'>#{provider_name}</div>")
             $(chat).append(hydra.ui.createMessageElement(message))
         @scrollChatBottom()
 
@@ -98,22 +104,21 @@ class UI
                 hydra.ui.createSettingsDialog()
             when "debug"
                 hydra.ui.createSettingsDialog()
-
-    signalSettingClick: (event) ->
-        clicked = $(this).attr("data-uri")
-        console.log(clicked)
-        switch clicked
-            when "close"
-                $("#dialog-settings").remove()
-            when "d-panel-debug"
                 hydra.ui.settings.debug()
-
 
     signalMessageSent: (event) =>
         content = $(appbar_input).val()
         return if @currentConversation is null or content is ""
+        return if @currentSelectedProvider is 0
 
-        message = new hydra.Message(content, 1, "text", Date.now(), 0)
+        @sendMessage(content, "text")
+
+        @refresh()
+        @scrollChatBottom()
+        $(appbar_input).val("") # Clear out input field
+
+    sendMessage: (content, type) ->
+        message = new hydra.Message(content, 2, type, Date.now(), @currentSelectedProvider)
         @currentConversation.addMessage(message)
 
         data = {
@@ -121,15 +126,10 @@ class UI
             message: message
             partner: @currentConversation.partner
         }
-
         postdata = hydra.post.createMessage(hydra.post.address.ui,
             [hydra.post.address.providers], "sent_message", data)
         hydra.post.send(postdata)
-        hydra.database.conversations.save()
 
-        @refresh()
-        @scrollChatBottom()
-        $(appbar_input).val("") # Clear out input field
 
     signalConversationClicked: (event) ->
         person_id = Number($(this).attr("person_id"))
@@ -171,15 +171,14 @@ class UI
         return element
 
     createDialogPanelItem: (text, id) -> $("<div class='dialog-panel-item' id='#{id}' data-uri='#{id}'>#{text}</div>")
+    createDialogListItem: (id, text) -> $("<div class='dialog-panel-list-item' data-uri='#{id}'>#{text}</div>")
 
     createSettingsDialog: ->
         dialog = @createDialog("dialog-settings", "dialog-large")
         leftpane = $("<div>").addClass("dialog-panel-left")
         rightpane = $("<div>").addClass("dialog-panel-right")
 
-        leftpanetitle =$("<div>").addClass("dialog-panel-left-titlepanel")
-        leftpanetitle.append($("<span>Settings</span>"))
-
+        leftpanetitle =$("<div>Settings</div>").addClass("dialog-panel-left-titlepanel")
         closebutton = $("<div id='dialog-settings-close' data-uri='close'>&times;</div>")
 
         leftpane.append(leftpanetitle)
@@ -199,6 +198,15 @@ class UI
         # Setup Events
         $(".dialog-panel-left").on("click", "div",@signalSettingClick)
 
+    signalSettingClick: (event) ->
+        clicked = $(this).attr("data-uri")
+        console.log(clicked)
+        switch clicked
+            when "close"
+                $("#dialog-settings").remove()
+            when "d-panel-debug"
+                hydra.ui.settings.debug()
+
     createMessageElement: (message) ->
         return null unless message?
         element = $("<div>").addClass("chat-message")
@@ -217,16 +225,12 @@ class UI
     createConversationElement: (person_id, text, time) ->
         person = hydra.database.people.findById(person_id)
         return null if person is null
-        element = $("<div>").addClass("conversation-base")
-            .attr("person_id", person_id)
-        icon = $("<img>").addClass("conversation-icon")
-            .attr("src", person.avatar_location)
-        provider_icon = $("<img>").addClass("provider-icon")
-            .attr("src", "images/icons/hydra_talk_inverted.png")
+        element = $("<div>").addClass("conversation-base").attr("person_id", person_id)
+        icon = $("<img>").addClass("conversation-icon").attr("src", person.avatar_location)
         name = $("<div>").addClass("conversation-name").text(person.name)
         time = $("<div>").addClass("conversation-time").text(time)
         blurb = $("<div>").addClass("conversation-blurb").text(text)
-        element.append(icon, name, time, blurb, provider_icon)
+        element.append(icon, name, time, blurb)
         return element
 
     mail: (message) =>

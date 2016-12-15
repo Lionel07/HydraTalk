@@ -44,17 +44,26 @@ class PeopleDatabase
         localStorage["PeopleDatabase"] = data
         return true
 
-    parsePacket: (packet) ->
-        return false unless packet.delta.contacts?
-        shouldRefresh = false
-        for person in packet.delta.contacts
-            pid = person.person_id
-            dbentry = @findById(pid)
-            unless dbentry?
-                @add(person)
-                shouldRefresh = true
+    isDuplicate: (a, b) ->
+        if a.isUnique? | b.isUnique?
+            return false
+        confidence = 0
+        threshold = 2
 
-        return shouldRefresh
+        confidence++ if(a.name is b.name)
+        confidence++ if(a.avatar_location is b.avatar_location)
+        return confidence >= threshold
+
+    scanDuplicates: (a) ->
+        res = false
+        person = null
+        for i in @people
+            res_s = @isDuplicate(a, i)
+            if res_s is true
+                res = true
+                person = i
+                break
+        return {res: res, person: person}
 
 this.hydra.database = {} unless this.hydra.database?
 hydra.database.people = new PeopleDatabase()
