@@ -17,21 +17,14 @@
     }
 }
 
-.conversation-base {
-    background-color: @conversation_color;
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size:@text-conversation-blurb-size;
-    color: #CCCCCC;
-    .conversation-name {
-        font-family: 'Roboto', sans-serif;
-        font-size:@text-conversation-name-size;
-        color: @textcolor;
-    }
-    .materialShadow();
-    z-index: 1;
+#appbar-search {
+    background-color: @color_primary - #111;
+    outline: none;
+    color: white;
 }
-
-.conversation-base-selected {
-    background-color: @conversation_color - #0F0F0F;
-    z-index: 0;
+#appbar-search:focus {
+    background-color: @color_primary - #222;
+}
+#appbar-search::placeholder {
+    color: #F9F9F9;
 }

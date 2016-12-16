@@ -20,6 +20,11 @@ class UI
         @isSetup = false
         @currentConversation = null
         @currentSelectedProvider = 1
+        @shouldUpdate = {
+            conversations: yes
+            appbar: yes
+            chat: yes
+        }
         debug.log("UI","Created")
 
     start: ->
@@ -31,10 +36,16 @@ class UI
         debug.log("UI","Starting")
         hydra.post.registerHandler(hydra.post.address.ui, @mail)
 
-    refresh: ->
-        @updateConversationList()
-        @updateAppbarUserInfo()
-        @displayConversation(@currentConversation) if @currentConversation?
+    refresh: =>
+        @updateConversationList() if @shouldUpdate.conversations
+        @updateAppbarUserInfo() if @shouldUpdate.appbar
+        if @shouldUpdate.chat
+            @displayConversation(@currentConversation) if @currentConversation?
+        @shouldUpdate = {
+            conversations: no
+            appbar: no
+            chat: no
+        }
 
     setupNativeUI: ->
         debug.log("UI", "Native app, modifying UI accordingly")
@@ -44,6 +55,7 @@ class UI
         $(appbar_sendmessage).click(@signalMessageSent)
         $(appbar_input).keyup((event) ->
             $(appbar_sendmessage).click() if event.keyCode is 13
+            hydra.ui.shouldUpdate.chat = true
         )
         $(appbar_menu).click(@signalMenuClick)
         $(appbar_menu_content).on("click", "li", @signalMenuItemClick)
@@ -53,28 +65,30 @@ class UI
     updateConversationList: ->
         conversations =  hydra.database.conversations.conversations.length
         return $(conversationlist).html("<div id='noconversationtext'>No Conversations</div>") if conversations is 0
-        # Order the list
         conversations_sorted = hydra.database.conversations.conversations.sort((a, b) ->
             return b.getLastMessage().time - a.getLastMessage().time
         )
         $(conversationlist).html("")
         for i in conversations_sorted
-            partner = hydra.database.people.findById(i.partner)
-            last_message = i.getLastMessage()
-            if last_message?
-                display_text = "You:" if last_message.status > 0
-                display_text = "System: " if last_message.status is 0
-                display_text = "#{partner.name}: " if last_message.status < 0
-                display_text += last_message.content
-                time = last_message.time
-            else
-                display_text = ""
-                time = 0
-            element = @createConversationElement(i.partner,display_text,time)
-            continue if element is null
-            $(element).addClass("conversation-base-selected") if @currentConversation is i
-            $(conversationlist).append(element)
+            $(conversationlist).append(@createConversationListItem(i))
         return
+
+    createConversationListItem: (i) ->
+        partner = hydra.database.people.findById(i.partner)
+        last_message = i.getLastMessage()
+        if last_message?
+            display_text = "You:" if last_message.status > 0
+            display_text = "System: " if last_message.status is 0
+            display_text = "#{partner.name}: " if last_message.status < 0
+            display_text += last_message.content
+            time = last_message.time
+        else
+            display_text = ""
+
+        element = @createConversationElement(i.partner,display_text,time)
+        return if element is null
+        $(element).addClass("conversation-base-selected") if @currentConversation is i
+        return element
 
     updateAppbarUserInfo: ->
         return unless hydra.userInfo.user?
@@ -112,7 +126,8 @@ class UI
         return if @currentSelectedProvider is 0
 
         @sendMessage(content, "text")
-
+        hydra.ui.shouldUpdate.conversations = true
+        hydra.ui.shouldUpdate.chat = true
         @refresh()
         @scrollChatBottom()
         $(appbar_input).val("") # Clear out input field
@@ -134,7 +149,8 @@ class UI
     signalConversationClicked: (event) ->
         person_id = Number($(this).attr("person_id"))
         return if person_id is 0
-
+        hydra.ui.shouldUpdate.conversations = true
+        hydra.ui.shouldUpdate.chat = true
         newConversation = hydra.database.conversations.getFromPID(person_id)
         hydra.ui.currentConversation = newConversation unless newConversation is null
         hydra.ui.refresh()
@@ -228,8 +244,31 @@ class UI
         element = $("<div>").addClass("conversation-base").attr("person_id", person_id)
         icon = $("<img>").addClass("conversation-icon").attr("src", person.avatar_location)
         name = $("<div>").addClass("conversation-name").text(person.name)
-        time = $("<div>").addClass("conversation-time").text(time)
         blurb = $("<div>").addClass("conversation-blurb").text(text)
+        # Calculate time since
+        time_since = Date.now() - time
+        time_since = 0 if time_since < 0
+        scale = 0
+        if time_since >= 1000
+            scale = 1
+            if time_since >= 60000
+                scale = 2
+                if time_since >= 3600000
+                    scale = 3
+
+        switch scale
+            when 0
+                time_since = "Now"
+            when 1
+                time_since = "#{Math.floor(time_since/1000)}s"
+            when 2
+                time_since = "#{Math.floor(time_since/60000)}m"
+            when 3
+                suffix = ""
+                suffix = "'s"if (time_since/3600000 > 2)
+                time_since = "#{Math.floor(time_since/3600000)} h#{suffix}"
+
+        time = $("<div>").addClass("conversation-time").text(time_since)
         element.append(icon, name, time, blurb)
         return element
 

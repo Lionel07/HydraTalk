@@ -16,7 +16,10 @@
 <body>
     <appmain>
     <sidebar>
-        <appbar class="appbar-header appbar-sidebar"></appbar>
+        <appbar class="appbar-header appbar-sidebar">
+        <i id="appbar-search-icon" class="material-icons md-48">search</i>
+        <input id="appbar-search" type="text" placeholder="Search..."/>
+        </appbar>
         <conversation-list id="conversation-list"></conversation-list>
         <appbar class="appbar-footer appbar-sidebar">
             <img id="appbar-useravatar"/>
@@ -29,7 +32,7 @@
         <appbar class="appbar-header appbar-chat hide-on-small"></appbar>
         <chat-messages id="chat-messages" class="hide-on-small"></chat-messages>
         <appbar class="appbar-footer appbar-chat hide-on-small">
-            <i id="appbar-switchprovider" class="material-icons">at</i>
+            <i id="appbar-switchprovider" class="material-icons">swap_horiz</i>
             <input id="appbar-input" type="text" placeholder="Say something..."/>
             <i id="appbar-sendmessage" class="material-icons md-48">send</i>
         </appbar>
@@ -43,13 +46,24 @@
         </ul>
     </div>
 
+    <script>
+    if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+    }
+    </script>
+
     <link href="bower/css/normalize.css" rel="stylesheet">
     <link href="css/layout/main.css" rel="stylesheet">
     <link href="css/materialblue/main.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Material+Icons" rel="stylesheet">
     <script src="bower/js/jquery.min.js"></script>
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
     <script type="text/javascript" src="js/app.js"></script>
-    
+
     <script>
     $(document).ready(function() {
         hydra.app.start()

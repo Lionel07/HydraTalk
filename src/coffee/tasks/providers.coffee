@@ -68,6 +68,7 @@ class ProviderTask
 
                     debug.debug("ProviderDispatch","New Contact (UID #{mapping.uid} -> ID #{mapping.id}), #{if isDuplicate.res then "dupe" else "unique"}")
                     @queueUIRefresh = true
+                    hydra.ui.shouldUpdate.conversations = true
 
     mapUidtoId: (provider_id, uid) ->
         for mapping in @uidMappings
@@ -93,12 +94,17 @@ class ProviderTask
                         @processMessages(conv, conversation.messages, provider_id)
                         hydra.database.conversations.add conv
                     @queueUIRefresh = true
+                    hydra.ui.shouldUpdate.conversations = true
+                    hydra.ui.shouldUpdate.chat = true
                     conv.sort()
                 when "update"
                     partner_id = @mapUidtoId(provider_id, conversation.uid)
                     conv = hydra.database.conversations.getFromPID(partner_id)
                     @processMessages(conv, conversation.messages, provider_id)
                     conv.sort()
+                    @queueUIRefresh = true
+                    hydra.ui.shouldUpdate.conversations = true
+                    hydra.ui.shouldUpdate.chat = true
 
     processMessages: (conversation, messages, provider_id) ->
         return unless messages?

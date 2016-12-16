@@ -9,7 +9,7 @@ class SampleProvider extends hydra.Provider
             conversations: yes
             group: yes
         })
-        @provider_id = 1
+        @provider_id = 2
         @nextUpdate = {
             contacts: [
                 {status: "new", name: "Sample", uid: 1, avatar: "images/icons/hydra_talk_inverted.png"}
@@ -17,7 +17,7 @@ class SampleProvider extends hydra.Provider
             conversations: [
                 {
                     status: "new", uid: 1, messages: [
-                        {status: "new", type: "text", fromPartner: true, time: 0, content: "Hello!"}
+                        {status: "new", type: "text", fromPartner: true, time: Date.now() - 100000, content: "Test"}
                     ]
                 }
             ]

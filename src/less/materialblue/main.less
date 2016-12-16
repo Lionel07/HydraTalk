@@ -33,6 +33,31 @@ chat {
     font-size: 1em;
 }
 
+
+.conversation-base {
+    background-color: @conversation_color;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size:@text-conversation-blurb-size;
+    color: #CCCCCC;
+    .conversation-name {
+        font-family: 'Roboto', sans-serif;
+        font-size:@text-conversation-name-size;
+        color: @textcolor;
+    }
+    .conversation-time {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size:@text-conversation-blurb-size;
+        color: #AAAAAA;
+    }
+    .materialShadow();
+    z-index: 1;
+}
+
+.conversation-base-selected {
+    background-color: @conversation_color - #0F0F0F;
+    z-index: 0;
+}
+
 @import "appbar";
 @import "chat";
 @import "dialog";

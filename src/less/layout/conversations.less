@@ -22,9 +22,8 @@
 .conversation_content() {
     position: relative;
     width: calc(~'100%' - @conversation-element-height + @conversation-content-offset * 2);
-    float: left;
     left: @conversation-content-offset * 3;
-    top: @conversation-content-offset * 2;
+    top: @conversation-content-offset * 2.60;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -45,15 +44,15 @@
         border-radius: @conversation-element-height;
     }
     .conversation-name { .conversation_content()}
-    .conversation-time { display: none; }
-    .conversation-blurb { .conversation_content();  }
-    .provider-icon {
+    .conversation-time {
         position: absolute;
-        width: @conversation-provider-size;
-        height: @conversation-provider-size;
-        top: @conversation-element-height - @conversation-content-offset * 6;
-        left: @conversation-element-height - @conversation-content-offset * 6;
-        border-radius: @conversation-provider-size;
-        background-color: #FFFFFF;
+        right: @conversation-content-offset * 2;
+        bottom: @conversation-content-offset * 1;
+        width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: right;
     }
+    .conversation-blurb { .conversation_content(); }
 }
