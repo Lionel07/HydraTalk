@@ -9,7 +9,7 @@ class SampleProvider extends hydra.Provider
             conversations: yes
             group: yes
         })
-        @provider_id = 2
+        @provider_id = 1000000
         @nextUpdate = {
             contacts: [
                 {status: "new", name: "Sample", uid: 1, avatar: "images/icons/hydra_talk_inverted.png"}
@@ -36,4 +36,4 @@ class SampleProvider extends hydra.Provider
 
     pull: () ->
 
-hydra.providers.push(new SampleProvider())
+#hydra.providers.push(new SampleProvider())
