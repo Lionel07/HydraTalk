@@ -7,7 +7,7 @@ var concat = require('gulp-concat');
 gulp.task('coffee', function() {
     return gulp.src(config.coffee.src)
         .pipe(coffee({bare: false}).on('error', swallowError))
-        .pipe(concat(config.coffee.bundle_name))
+        //.pipe(concat(config.coffee.bundle_name))
         .pipe(gulp.dest(config.coffee.dest));
 });
 

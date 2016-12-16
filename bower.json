@@ -28,6 +28,11 @@
   "overrides": {
     "jquery": {
       "main": "**/jquery.min.js"
+    },
+    "rest": {
+        "normalize": {
+            "js": "rest-browser.js"
+        }
     }
   }
 }
